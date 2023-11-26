@@ -27,3 +27,15 @@ class DicePartition:
 
     def __len__(self) -> int:
         return 6
+
+@dataclass(frozen = True)
+class SimpleDicePartition(DicePartition):
+    def __init__(self) -> None:
+        super().__init__(
+            side_1 = '1',
+            side_2 = '2',
+            side_3 = '3',
+            side_4 = '4',
+            side_5 = '5',
+            side_6 = '6'
+        )
