@@ -4,6 +4,7 @@ from collections import Counter
 from itertools import combinations_with_replacement
 from dice_throne_probability_calculator.utils.dice_partition import DicePartition, SimpleDicePartition
 from dice_throne_probability_calculator.utils.combinations import Combination
+
 class SimilarityProbabilityCalculator:
 
     def __init__(
@@ -18,7 +19,6 @@ class SimilarityProbabilityCalculator:
         symbol_combination: Combination,
         number_of_dice: int
     ):
-
         return (
             (
                 math.prod(
@@ -95,70 +95,46 @@ class StreightProbabilityCalculator:
         self.number_of_outcomes: int = len(dice_partition)
         self.symbol_frequencies: Combination = dice_partition.get_symbol_frequencies()
 
-    def _calculate_probability_of_combination(
-        self,
-        symbol_combination: Combination,
-        number_of_dice: int
-    ):
-        print((
-                math.factorial(len(symbol_combination.to_tuple()))
-                * (
-                    (self.number_of_outcomes-len(symbol_combination.to_tuple())) ** (
-                        number_of_dice - len(symbol_combination.to_tuple())
-                    )
-                )
-                * (
-                    math.factorial(number_of_dice) / (
-                        math.factorial(number_of_dice - len(symbol_combination.to_tuple()))
-                        * math.factorial(len(symbol_combination.to_tuple()))
-                    )
-                )
-            )-)
-        return (
-            (
-                (
-                    self.number_of_outcomes ** (
-                        number_of_dice - len(symbol_combination.to_tuple())
-                    )
-                )
-                * (
-                    math.factorial(number_of_dice) / (
-                        math.factorial(number_of_dice - len(symbol_combination.to_tuple()))
-                        * math.factorial(len(symbol_combination.to_tuple()))
-                    )
-                )
-            )
-            / (
-                self.number_of_outcomes
-                ** number_of_dice
-            )
-        )
-
     def calculate_probability(
         self,
         streight_number: int,
         number_of_dice: int
     ):
-        probability_accumulator = 0
+        basic_sets = [
+            {j + i for j in range(streight_number)}
+            for i in range(1, self.number_of_outcomes - streight_number + 2)
+        ]
+        prob = len(basic_sets) * SimilarityProbabilityCalculator(
+            SimpleDicePartition()
+        ).calculate_probability(
+            Combination(
+                combination = tuple([str(i) for i in range(streight_number)])
+            ),
+            5
+        )
+        for i, basic_set_i in enumerate(basic_sets):
+            for basic_set_j in basic_sets[i+1:]:
+                prob -= 
+                print(basic_set_i | basic_set_j)
 
-        for streight_number_tmp in range(streight_number, number_of_dice+1):
+        # for streight_number_tmp in range(streight_number, number_of_dice+1):
 
-            comb = Combination(
-                combination = tuple([str(i+1) for i in range(0,streight_number_tmp)])
-            )
-            print(comb.to_tuple())
-            probability_accumulator += self._calculate_probability_of_combination(
-                comb,
-                number_of_dice
-            ) * (1 if streight_number_tmp == streight_number else -1)
+        #     comb = Combination(
+        #         combination = tuple([str(i+1) for i in range(0,streight_number_tmp)])
+        #     )
+        #     print(comb.to_tuple())
+        #     probability_accumulator += self._calculate_probability_of_combination(
+        #         comb,
+        #         number_of_dice
+        #     ) * (1 if streight_number_tmp == streight_number else -1)
 
-            for number_of_n_kind in range(streight_number_tmp+1, self.number_of_outcomes + 1):
-                comb = Combination(
-                    combination = comb.to_tuple()[1:] + (str(number_of_n_kind),)
-                )
-                print(comb.to_tuple())
-                probability_accumulator += self._calculate_probability_of_combination(
-                    comb,
-                    number_of_dice
-                ) * (1 if streight_number_tmp == streight_number else -1)
-        return probability_accumulator
+        #     for number_of_n_kind in range(streight_number_tmp+1, self.number_of_outcomes + 1):
+        #         comb = Combination(
+        #             combination = comb.to_tuple()[1:] + (str(number_of_n_kind),)
+        #         )
+        #         print(comb.to_tuple())
+        #         probability_accumulator += self._calculate_probability_of_combination(
+        #             comb,
+        #             number_of_dice
+        #         ) * (1 if streight_number_tmp == streight_number else -1)
+        # return probability_accumulator

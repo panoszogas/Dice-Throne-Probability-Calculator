@@ -23,36 +23,39 @@ if __name__ == "__main__":
     #     )
     # )
     print(
+        SimilarityProbabilityCalculator(
+            SimpleDicePartition()
+        ).calculate_probability(
+            SymbolCombination(
+                combination = ('1','2','3')
+            ),
+            5
+        ),
+        SimilarityProbabilityCalculator(
+            SimpleDicePartition()
+        ).calculate_probability(
+            SymbolCombination(
+                combination = ('1','2','3')
+            ),
+            5
+        )*6**5
+    )
+    print(
         StreightProbabilityCalculator(
         ).calculate_probability(
-            3,
+            2,
             5
         )
     )
-    # all_combinations = [comb for comb in product(range(1,7), repeat=5)]
-    # # print(all_combinations)
-    # total_count = 0
-    # for combination in all_combinations:
-    #     count_1 = 0
-    #     count_2 = 0
-    #     count_3 = 0
-    #     for i in combination:
-    #         if i in {1}:
-    #             count_1 += 1
-    #         if i in {2}:
-    #             count_2 += 1
-    #         if i in {3}:
-    #             count_3 += 1
-    #     if count_1 >= 1 and count_2 >= 1 and count_3 >= 3:
-    #         total_count += 1
-    # print(total_count / len(all_combinations))
     all_combinations = [comb for comb in product(range(1,7), repeat=5)]
-    # print(all_combinations)
     total_count = 0
     for combination in all_combinations:
-
-        if 1 in combination and 2 in combination and 3 in combination :
+        norm_combination = sorted(list(set(combination)))
+        cum_sum = 0
+        for i, n_i in zip(norm_combination[:-1],norm_combination[1:]):
+            if i+1 == n_i:
+                cum_sum += 1
+        if cum_sum >= 2:
             total_count += 1
-
     print(total_count / len(all_combinations))
     print(total_count,len(all_combinations))

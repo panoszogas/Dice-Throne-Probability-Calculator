@@ -17,6 +17,7 @@ class Combination:
 @dataclass(frozen = True, kw_only = True)
 class SymbolCombination(Combination):
     combination_type: str = 'symbol'
+
 @dataclass(frozen = True, kw_only = True)
 class DigitCombination(Combination):
     combination_type: str = 'digit'
